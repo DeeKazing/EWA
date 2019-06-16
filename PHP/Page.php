@@ -50,6 +50,7 @@ abstract class Page
     protected function __construct() 
     {
         $this->_database = new MySQLi("localhost","root","","pizzaservice");
+        $this->_database->set_charset("utf8");
     }
     
     /**
@@ -87,10 +88,10 @@ abstract class Page
             <!-- für später: CSS include -->
             <!-- <link rel="stylesheet" href="XXX.css"/> -->
             <!-- für später: JavaScript include -->
-            <!-- <script src="XXX.js"></script> -->
+            <!-- <script src="../XXX.js"></script> -->
             <title>Text des Titels</title>
             <!-- <link rel="stylesheet" href="style.css" type="Text/css"> -->
-            <link rel="stylesheet" href="style.css" type="Text/css">
+            <link rel="stylesheet" href="../css/style.css" type="Text/css">
         </head>
         <body>
 code;
@@ -105,7 +106,7 @@ code;
     {
         // to do: output common end of HTML code
         echo <<<footer
-        <footer>Fusszeile</footer>
+        <footer>Feridun Aydin Aydogan</footer>
         </div>
         </body>
 footer;
