@@ -18,6 +18,7 @@
 
 // to do: change name 'PageTemplate' throughout this file
 require_once './Page.php';
+require_once './Order.php';
 
 /**
  * This is a template for top level classes, which represent 
@@ -67,9 +68,16 @@ class Kunde extends Page
      *
      * @return none
      */
-    protected function getViewData()
+    protected function getViewData($oid)
     {
-        // to do: fetch data for this view from the database
+        $offeritems = $this->_database->query("SELECT Status, PizzaName FROM `angebot` o,`bestelltepizza` i, `bestellung` od WHERE i.fPizzaNummer=o.PizzaNummer AND i.fBestellungID=od.BestellungID AND od.BestellungID = $oid; ");
+      if (!$offeritems)
+          throw new Exception("Query failed:" .$_database->error());
+      $ergebnis=[];
+       while($item = $offeritems->fetch_assoc()){
+        array_push($ergebnis,new Order($item['Status'],$item['PizzaName']));
+      }
+      return $ergebnis;// to do: fetch data for this view from the database
     }
     
     /**
@@ -83,19 +91,19 @@ class Kunde extends Page
      */
     protected function generateView() 
     {
-        $this->getViewData();
         $this->generatePageHeader('Kunde');
-        // to do: call generateView() for all members
-echo <<<feri
+        if(isset($_SESSION['oid'])){
+            $items = $this->getViewData($_SESSION['oid']);
+        }else{
+          echo <<<header_no_order
 <div id ="wrapper">
-
 <header>
-    <img src="../Bilder/logo.png" alt="logo">
+    <img id="logo" src="../Bilder/logo.png" alt="logo">
     <nav>
         <ul>
             <li><a  href="bestellung.php">Bestellungen</a></li>
             <li><a href="baecker.php">Bäcker</a></li>
-            <li><a class="active" href="Kunde.php">Kunde</a></li>
+            <li><a class="active" href="#kunde">Kunde</a></li>            
             <li><a  href="Fahrer.php">Fahrer</a></li>
         </ul>
     </nav>
@@ -104,27 +112,53 @@ echo <<<feri
 
 <section>
 <h1>Lieferstatus</h1>
-  <div class="order">
-      <div class="Item">Margherita: Bestellt</div>
-  </div>
-  <div class="order">
-      <div class="Item">Salami: In Ofen</div>
-  </div>
-  <div class="order">
-      <div class="Item">Tonno:</div>
-      <div class="Status">Fertig</div>
-  </div>
-  <div class="order">
-      <div class="Item">Hawaii:</div>
-      <div class="Status">bestellt</div>
-  </div>
-  <button>Neue Bestellung</button>
+<div class="content">
+<div class="error">
+  <div class="img"><img src="../Bilder/bruder.jpg" width="100" alt=":("></div>
+  <div class="msg">Bruder du hast nichts bestellt. <a href="./bestellung.php">Hier</a> kannst du dir unser Angebot ansehen!</div>
+</div>
+</div>
 </section>
-feri;
+header_no_order;
         // to do: output view of this page
         $this->generatePageFooter();
+        return;
     }
-    
+    echo <<<header
+    <script src="../js/StatusUpdate.js"></script>
+    <div id ="wrapper">
+<header>
+    <img id="logo" src="../Bilder/logo.png" alt="logo">
+    <nav id="navbar">
+        <ul>
+            <li><a  href="bestellung.php">Bestellungen</a></li>
+            <li><a href="baecker.php">Bäcker</a></li>
+            <li><a class="active" href="#kunde">Kunde</a></li>            
+            <li><a  href="Fahrer.php">Fahrer</a></li>
+        </ul>
+    </nav>
+</header>
+<section>
+header;
+$ostatus="";
+foreach ($items as $item){
+    $ostatus = htmlspecialchars($item->status, ENT_QUOTES | ENT_HTML5 | ENT_DISALLOWED | ENT_SUBSTITUTE, 'UTF-8');
+    $oname = htmlspecialchars($item->name);
+
+echo <<<order
+          <div class="order">
+              <div class="Item">$oname</div>
+          </div>
+order;
+}   
+echo <<<footer
+          <div class="Status" id="status">$ostatus</div>
+        </div>
+      </div>
+      </section>
+footer;
+$this->generatePageFooter();
+}
     /**
      * Processes the data that comes via GET or POST i.e. CGI.
      * If this page is supposed to do something with submitted
@@ -155,6 +189,7 @@ feri;
     public static function main() 
     {
         try {
+            session_start();
             $page = new Kunde();
             $page->processReceivedData();
             $page->generateView();

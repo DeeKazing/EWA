@@ -101,19 +101,19 @@ class Fahrer extends Page
     protected function generateView() 
     {
         $items = $this->getViewData();
-        $this->generatePageHeader('fahrer');
+        $this->generatePageHeader('Fahrer');
         // to do: call generateView() for all members
         echo <<<feri
         <div id ="wrapper">
 
         <header>
-            <img src="../Bilder/logo.png" alt="logo">
-            <nav>
+            <img id="logo" src="../Bilder/logo.png" alt="logo">
+            <nav id="navbar">
                 <ul>
                     <li><a  href="bestellung.php">Bestellungen</a></li>
                     <li><a href="baecker.php">Bäcker</a></li>
                     <li><a href="Kunde.php">Kunde</a></li>
-                    <li><a class="active" href="fahrer.php">fahrer</a></li>
+                    <li><a class="active" href="Fahrer.php">Fahrer</a></li>
                 </ul>
             </nav>
         </header>

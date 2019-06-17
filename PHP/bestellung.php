@@ -114,8 +114,8 @@ EOT;
 echo <<<EOT
     <div id ="wrapper">
     <header>
-        <img src="../Bilder/logo.png" alt="logo">
-        <nav>
+        <img id="logo" src="../Bilder/logo.png" alt="logo">
+        <nav id="navbar">
             <ul>
                 <li><a class="active" href= "bestellung.php">Bestellungen</a></li>
                 <li><a href="baecker.php">Bäcker</a></li>
@@ -131,40 +131,33 @@ echo <<<EOT
 EOT;
 
 foreach($ergebnis as $item) {
+    $toPass = htmlspecialchars(json_encode($item));
 echo <<<EOT
 
         <div class="item">
             <div class="text">$item->pizzaname</div>
             <div class="price">$$item->preis €</div>            
-            <div class="thumb"><img src="$item->pfad" width="100" alt="$item->pizzaname" onclick="addToBasket(this, 'test')"></div>
-
+            <div class="thumb"><img src="$item->pfad" width="100" alt="$item->pizzaname" onclick="addToBasket(this, '$toPass')"></div>
         </div>
-
-      <!--  <div>
-        <p>$item->pfad</p>
-        <p>$item->pizzaname</p>
-        <p>$item->preis</p>
-        </div>-->
 EOT;
 };
 
 echo <<<code
 
-<h3>Warenkorb</h3>
-<form action="bestellung.php" method="post" onsubmit)" return isValidForm()">
+<h1>Warenkorb</h1>
+<form action="bestellung.php" method="post" onsubmit="return isValidForm()">
     <label>
-      <select name="Bestellung[]" size="6" tabindex="1" multiple>
-      <option>FerisPizza</option>
+      <select name="Bestellung[]" id="wk" size="6" tabindex="1" multiple>
       </select>
     </label>
 
 <div class="total" id="sumField">Gesamtpreis: 0€</div>
-<input type="submit" value="Auswahl Löschen" tabindex="2">
-    <input type="submit" value="Alle Löschen" tabindex="3">
-    <input type="text" name="Name" value="" placeholder="Name" tabindex="4">
-    <input type="text" name="Adresse" value="" placeholder="Adresse" tabindex="5">
-    <input type="text" name="PLZ" value="" placeholder="PLZ" pattern="\b\d{5}\b" tabindex="6">
-    <input type="submit" value="Bestellen" tabindex="7">
+    <input type="button" value="Auswahl Löschen" onclick="removeFromBasket()" tabindex="2">
+    <input type="button" value="Alle Löschen" onclick="emptyBasket()" tabindex="3">
+    <input type="text" name="Name" value="" id="name" placeholder="Name" tabindex="4">
+    <input type="text" name="Adresse" value="" id="adr" placeholder="Adresse" tabindex="5">
+    <input type="text" name="PLZ" value="" id="plz" placeholder="PLZ" pattern="\b\d{5}\b" tabindex="6">
+    <input type="submit" disabled="disabled" value="Bestellen" onclick="submitOrder()" id="send" tabindex="7">
 </form>
 
 </section>

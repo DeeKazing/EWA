@@ -103,8 +103,8 @@ class Baecker extends Page
 echo <<<feri
 <div id="wrapper">
 <header>
-    <img src="../Bilder/logo.png" alt="logo">
-    <nav>
+    <img id="logo" src="../Bilder/logo.png" alt="logo">
+    <nav id="navbar">
         <ul>
             <li><a href="bestellung.php">Bestellungen</a></li>
             <li><a class="active" href="baecker.php">Bäcker</a></li>
@@ -139,11 +139,8 @@ foreach($items as $item){
         continue 2;
     }
     $ototal = htmlspecialchars($item->gesamtpreis);
-    foreach ($item->bestellungen as $x){
-      $oitems .= $x ." ";
-    }
-    //var_dump($item);
-    echo <<<form
+    $oitems = implode(" | ", $item->bestellungen);
+echo <<<form
     <div class="todo">
       <form action="./baecker.php" method="post" id = "formid$i">
                   <div class="items">$oitems</div>
@@ -162,7 +159,6 @@ foreach($items as $item){
               </form>
             </div>
 form;
-echo("</section>");
 }
 
 
@@ -183,6 +179,7 @@ echo("</section>");
     </form>
 </section>
 */
+    echo("</section>");
         $this->generatePageFooter();
     }
     

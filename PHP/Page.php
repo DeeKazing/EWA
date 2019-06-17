@@ -73,13 +73,19 @@ abstract class Page
      *
      * @return none
      */
-    protected function generatePageHeader($headline = "") 
+    protected function generatePageHeader($headline = "", $refresh = true) 
     {
         $headline = htmlspecialchars($headline);
+        $script = "";
+        $meta = "";
         header("Content-type: text/html; charset=UTF-8");
-        
-        // to do: output common beginning of HTML code 
-        // including the individual headline
+        if($headline == "Bestellung"){
+            $script = '<script src="../js/functions.js"></script>';
+        }
+
+        if($headline == "Fahrer" || $headline == "Baecker"){
+            $meta = '<meta http-equiv="refresh" content="5">';
+        }
         echo <<<code
         <!DOCTYPE html>
         <html lang="de">  
@@ -88,8 +94,11 @@ abstract class Page
             <!-- für später: CSS include -->
             <!-- <link rel="stylesheet" href="XXX.css"/> -->
             <!-- für später: JavaScript include -->
+            $script
+            <script src ="../js/general.js"></script>
+            $meta
             <!-- <script src="../XXX.js"></script> -->
-            <title>Text des Titels</title>
+            <title>$headline</title>
             <!-- <link rel="stylesheet" href="style.css" type="Text/css"> -->
             <link rel="stylesheet" href="../css/style.css" type="Text/css">
         </head>
@@ -104,12 +113,8 @@ code;
      */
     protected function generatePageFooter() 
     {
-        // to do: output common end of HTML code
-        echo <<<footer
-        <footer>Feridun Aydin Aydogan</footer>
-        </div>
-        </body>
-footer;
+        echo('
+        </body>');
     }
 
     /**
