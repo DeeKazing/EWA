@@ -99,7 +99,7 @@ class Kunde extends Page
 <div id ="wrapper">
 <header>
     <img id="logo" src="../Bilder/logo.png" alt="logo">
-    <nav>
+    <nav id="navbar">
         <ul>
             <li><a  href="bestellung.php">Bestellungen</a></li>
             <li><a href="baecker.php">Bäcker</a></li>
@@ -153,8 +153,6 @@ order;
 }   
 echo <<<footer
           <div class="Status" id="status">$ostatus</div>
-        </div>
-      </div>
       </section>
 footer;
 $this->generatePageFooter();

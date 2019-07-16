@@ -114,7 +114,11 @@ code;
     protected function generatePageFooter() 
     {
         echo('
+        </div>');
+        echo('
         </body>');
+        echo('
+        </HTML>');
     }
 
     /**

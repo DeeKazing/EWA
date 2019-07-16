@@ -185,7 +185,7 @@ code;
             try {
               $sql = "INSERT INTO `Bestellung` (BestellungID, Adresse, Bestellzeitpunkt) VALUES (NULL, ? , CURRENT_TIMESTAMP)";
               if ($stmt = $this->_database->prepare($sql)) {
-                $adr = $this->_database->real_escape_string(htmlspecialchars($_POST['Name'] . " " . $_POST['Adresse'] . " " . $_POST['PLZ']));
+                $adr = $this->_database->real_escape_string($_POST['Name'] . " " . $_POST['Adresse'] . " " . $_POST['PLZ']);
                 $stmt->bind_param("s", $adr);
                 $stmt->execute();
                 $oid = $this->_database->insert_id;
