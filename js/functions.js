@@ -68,7 +68,6 @@ function isValidForm() {
 }
 
 document.addEventListener("click", function() {
-    "use strict";
     updateSubmitButton();
 });
 
@@ -97,7 +96,6 @@ function updateSubmitButton(){
 }
 
 document.addEventListener("keyup", function() {
-  "use strict";
   updateSubmitButton();
 });
 
